@@ -4,7 +4,7 @@ applause is a platform I built using centralized web technologies in combination
 
 ## Live
 
-You can see this live at [https://applause.chat/].
+You can see this live at [https://applause.chat/](https://applause.chat/).
 
 ## Why
 
