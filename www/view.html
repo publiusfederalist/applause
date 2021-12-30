@@ -1,0 +1,140 @@
+<html>
+ <head>
+  <title>view post by NAME @ applause - where hands come together</title>
+  <link rel="stylesheet" type="text/css" href="/static/style.css">
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+ </head>
+<body>
+<div class="background">
+</div>
+<div class="container">
+<h1 class='title'><a href='/' class='title'>applause</a></h1>
+<h1>view post</h1>
+<p>written by <b>NAME</b> and posted <span id='time'>TIME</span></p>
+<div class="postbox">
+<button id='raw'>view markdown</button>
+<div class='clear'></div>
+<textarea readonly id="postbox_markdown" style='display:none;'></textarea>
+<div id="postbox_content">MESSAGE</div>
+<div id='copy' title="copy raw text to clipboard to sign">&#x2398;</div>
+<div id="signature">SIGNATURE</div>
+<div id="signit">
+<form method='post' action='/applause'>
+ <input type="hidden" name="_csrf" value="" id="csrf_token">
+ <input type='hidden' name='target' value="TARGET">
+ <textarea name='message' id='applause_message'></textarea>
+ <input type='text' name='name' placeholder='handshake-name'>
+ <input type='text' name='signature' placeholder='signature'>
+ <button name='applause'>applaud</button>
+</form>
+</div>
+</div>
+<div id="applause">
+APPLAUSE
+</div>
+
+<div id='copy_notice' style='display:none;'>Copied!</div>
+
+<div class="footer">
+Copyright (c) 2021 <a href="https://github.com/publiusfederalist" target="_publius">Publius Federalist</a>.<br>
+All rights reserved.<br>
+<br>
+</div>
+</div>
+<script>
+window.onload = async () => {
+  let content = document.getElementById('postbox_content');
+  let markdown = document.getElementById('postbox_markdown');
+  markdown.value = content.innerHTML;
+  document.getElementById('applause_message').value=content.innerHTML;
+  content.innerHTML = marked.parse(content.innerHTML);
+  let timeBox = document.getElementById('time');
+  let time = timeBox.innerHTML;
+  time = new Date(time*1000).toString().replace(/\([^\)]+\)/,"").trim();
+  timeBox.innerHTML = time.substr(0,time.lastIndexOf(' '));
+  let textarea = document.getElementsByName('message')[0];
+  let buttonApplause = document.getElementsByName('applause')[0];
+  let inputName = document.getElementsByName('name')[0];
+  let signatureInput = document.getElementsByName('signature')[0];
+  let applauseBox = document.getElementById('applause');
+  let buttonRaw = document.getElementById('raw');
+  let wallet;
+  if(typeof bob3 !=="undefined") {
+    wallet = await bob3.connect();
+    const names = await wallet.getNames();
+    if(names.length>0) {
+      let obj = document.createElement('select');
+      obj.name = 'name';
+      inputName.parentNode.replaceChild(obj,inputName);
+      names.forEach((name)=>{
+        let n = document.createElement('option');
+        n.textContent = name.name;
+        n.value = name.name;
+        obj.appendChild(n);
+      }); 
+      let sig = document.createElement('input');
+      sig.type='hidden';  
+      sig.name='signature';
+      signatureInput.parentNode.replaceChild(sig,signatureInput);
+    }
+  }
+  buttonApplause.onclick = async (e) => {
+    e.preventDefault();
+    if(typeof bob3 !== "undefined") {
+      let signature = await wallet.signWithName(document.getElementsByName('name')[0].value, textarea.value);
+      document.getElementsByName('signature')[0].value=signature;
+    }
+    document.forms[0].submit();
+  }
+  let applause = JSON.parse(applauseBox.innerHTML);
+  applauseBox.innerHTML="<br><b><h2>"+applause.length+" applause received</h2></b><br>";
+  applause.forEach((_app) => {
+    let obj = document.createElement('div');
+    let _time = new Date(_app.timestamp*1000).toString().replace(/\([^\)]+\)/,"").trim();
+    _time = _time.substr(0,_time.lastIndexOf(' '));
+    obj.innerHTML="<b>&#128079; "+_app.name+" at " +_time+ "</b><br><span class='spacer'></span>"+_app.signature;
+    applauseBox.appendChild(obj);
+  });
+
+  buttonRaw.onclick = () => {
+    if(buttonRaw.innerHTML=='view markdown') {
+      buttonRaw.innerHTML='view parsed';
+      markdown.style.display='block';
+    }
+    else {
+      buttonRaw.innerHTML='view markdown';
+      markdown.style.display='none';
+    }
+  }
+  let copy=document.getElementById('copy');
+  copy.onclick = () => {
+    markdown.style.display='block';
+    markdown.select();
+    try {
+      copied = document.execCommand('copy');
+    } catch(e) {
+      copied = false;
+    }
+    markdown.style.display='none';
+    if(copied) {
+      document.getElementById('copy_notice').style.display='block';
+      setTimeout(()=>{ document.getElementById('copy_notice').style.display="none"; },3000);
+    }
+  }
+  // csrf
+  let req = new XMLHttpRequest();
+  req.onreadystatechange = () => {
+    if(req.readyState===XMLHttpRequest.DONE) {
+      if(req.status === 200)
+        document.getElementById('csrf_token').value=req.responseText.trim();
+    }
+  }
+  req.open('GET','/csrf');
+  req.send();
+  
+}
+</script>
+
+</body>
+</html>
+

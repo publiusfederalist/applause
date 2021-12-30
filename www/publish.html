@@ -1,0 +1,100 @@
+<html>
+ <head>
+  <title>publish @ applause - where hands come together</title>
+  <link rel="stylesheet" type="text/css" href="/static/style.css">
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+ </head>
+<body>
+<div class="background">
+</div>
+<div class="container">
+<h1 class='title'><a href='/' class='title'>applause</a></h1>
+<h1>publish</h1>
+<p>Write in <a href="https://www.markdownguide.org/" target="_markdown">markdown</a> for style.  Use <b>preview</b> to view before <b>post</b>ing.</p>
+<div class="postbox">
+<form method='post' action='/publish'>
+ <input type="hidden" name="_csrf" value="" id="csrf_token">
+ <textarea name='message'></textarea>
+ <input type='text' name='name' placeholder='handshake-name'>
+ <input type='text' name='signature' placeholder='signature'>
+ <button name='preview'>preview</button>
+ <button name='post'>post</button>
+</form>
+<div id="postbox_preview"></div>
+</div>
+
+<div class="footer">
+Copyright (c) 2021 <a href="https://github.com/publiusfederalist" target="_publius">Publius Federalist</a>.<br>
+All rights reserved.<br>
+<br>
+</div>
+</div>
+<script>
+window.onload = async () => {
+let textarea = document.getElementsByName('message')[0];
+let content = document.getElementById('postbox_preview');
+let buttonPreview = document.getElementsByName('preview')[0];
+let buttonPost = document.getElementsByName('post')[0];
+let inputName = document.getElementsByName('name')[0];
+let signatureInput = document.getElementsByName('signature')[0];
+let wallet;
+
+// bob3
+if(typeof bob3 !=="undefined") {
+  wallet = await bob3.connect();
+  const names = await wallet.getNames();
+  if(names.length>0) {
+    let obj = document.createElement('select');
+    obj.name = 'name';
+    inputName.parentNode.replaceChild(obj,inputName);    
+    names.forEach((name)=>{
+      let n = document.createElement('option');
+      n.textContent = name.name; 
+      n.value = name.name; 
+      obj.appendChild(n);
+    });
+    let sig = document.createElement('input');
+    sig.type='hidden';
+    sig.name='signature';
+    signatureInput.parentNode.replaceChild(sig,signatureInput);
+  }
+}
+buttonPost.onclick = async (e) => {
+  e.preventDefault();
+  if(typeof bob3 !=="undefined") {
+    let signature = await wallet.signWithName(document.getElementsByName('name')[0].value, textarea.value);
+    document.getElementsByName('signature')[0].value=signature;
+  }
+  document.forms[0].submit();
+}
+// preview/edit
+buttonPreview.onclick = (e) => {
+  e.preventDefault();
+  if(buttonPreview.textContent==="preview") {
+    buttonPreview.textContent = "edit";
+    content.style.display="block";
+    content.innerHTML = marked.parse(textarea.value);
+  }
+  else {
+    buttonPreview.textContent = 'preview';
+    content.style.display="none";
+  }
+}
+
+// csrf
+let req = new XMLHttpRequest();
+req.onreadystatechange = () => {
+  if(req.readyState===XMLHttpRequest.DONE) {
+    if(req.status === 200)
+      document.getElementById('csrf_token').value=req.responseText.trim();
+  }
+}
+req.open('GET','/csrf');
+req.send();
+
+}
+</script>
+
+</body>
+</html>
+

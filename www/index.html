@@ -1,0 +1,82 @@
+<html>
+ <head>
+  <title>applause - where hands come together</title>
+  <link rel="stylesheet" type="text/css" href="/static/style.css">
+ </head>
+<body>
+<div class="background">
+</div>
+
+<div class="container">
+<div class="header">
+ <a href="/p">publish</a>
+</div>
+<div class='clear'></div>
+
+<div class="splash">
+ <h1>applause</h1>
+ <h3>where hands come together.</h3>
+</div>
+<div class='clear'></div>
+
+<div class="about">
+ <div>
+  <h4>publish and give applause</h4>
+  <p>publish a post or applaud another and let the world know you agree with the statements.</p>
+ </div>
+ <div>
+  <h4>no signup/login needed</h4>
+  <p>applause authenticates all messages with cryptographic signatures generated from <a href="https://handshake.org" target="_new">handshake</a> names.</p>
+ </div>
+ <div>
+  <h4>no impersonation</h4>
+  <p>all messages and actions are signed -- even the admins cannot <a href="https://techcrunch.com/2016/11/23/reddit-huffman-trump/" target="_reddit">modify your posts</a>.</p>
+ </div>
+ <div>
+  <h4>not a social network</h4>
+  <p>applause does not try to be a social network.  you can either agree or disagree.  no comments necessary.</p>
+ </div>
+ <div>
+  <h4>transparent actions</h4>
+  <p>all applause are transparently associated with an on-chain handshake name. No stealth <i>votes</i>.</p>
+ </div>
+ <div>
+  <h4>(de)centralized hybrid</h4>
+  <p>applause is a centralized website relying on decentralized identity.</p>
+ </div>
+</div>
+<div id="frontposts">
+POSTS
+</div>
+<div class='clear'></div>
+<div class="footer">
+Copyright (c) 2021 <a href="https://github.com/publiusfederalist" target="_publius">Publius Federalist</a>.<br>
+All rights reserved.<br>
+<br>
+</div>
+</div>
+<script>
+let postBox = document.getElementById('frontposts');
+let posts = JSON.parse(postBox.innerHTML);
+postBox.innerHTML="";
+let x=1;
+
+posts.forEach((post) => {
+  let num = document.createElement('div');
+  num.className='number';
+  num.innerHTML=x;
+  let obj = document.createElement('div');
+  let period="...";
+  if(post.title.substr(0,1)=='#')
+    period="";
+  obj.innerHTML=`<a href='/v/${post.id}'>${post.title}${period}</a><br><span><b>${post.poster}</b> about ${post.timestamp}</span>`;
+  postBox.appendChild(num);
+  postBox.appendChild(obj);
+  postBox.appendChild(document.createElement('br'));
+  x++;
+});
+
+</script>
+</body>
+</html>
+
