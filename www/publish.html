@@ -4,6 +4,7 @@
   <link rel="stylesheet" type="text/css" href="/static/style.css">
   <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js" integrity="sha256-XXJuA8h+pdC9YsP1SrywrSyMl8xE1d+eD4EE+g2d1HU=" crossorigin="anonymous"></script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="/static/punycode.min.js" integrity="sha256-r+GEq/KRBxyrsnSDn9/GLv2p7UjerQKo92YgHO7Ru4c=" crossorigin="anonymous"></script>
  </head>
 <body>
 <div class="background">
@@ -50,7 +51,7 @@ if(typeof bob3 !=="undefined") {
     inputName.parentNode.replaceChild(obj,inputName);    
     names.forEach((name)=>{
       let n = document.createElement('option');
-      n.textContent = name.name; 
+      n.textContent = punycode.toUnicode(name.name); 
       n.value = name.name; 
       obj.appendChild(n);
     });
