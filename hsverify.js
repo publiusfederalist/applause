@@ -10,7 +10,9 @@ const client = new NodeClient({
 });
 
 async function verify(name,message,signature) {
-  return await client.execute('verifymessagewithname', [name, signature, message.replaceAll("\r","")]);
+  if(Buffer.from(signature, 'base64').toString('base64') === signature)
+    return await client.execute('verifymessagewithname', [name, signature, message.replaceAll("\r","")]);
+  return false;
 }
 
 module.exports = verify;
