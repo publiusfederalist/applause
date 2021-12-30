@@ -3,6 +3,7 @@
   <title>view post by NAME @ applause - where hands come together</title>
   <link rel="stylesheet" type="text/css" href="/static/style.css">
   <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js" integrity="sha256-XXJuA8h+pdC9YsP1SrywrSyMl8xE1d+eD4EE+g2d1HU=" crossorigin="anonymous"></script>
+  <script src="/static/punycode.min.js" integrity="sha256-r+GEq/KRBxyrsnSDn9/GLv2p7UjerQKo92YgHO7Ru4c=" crossorigin="anonymous"></script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
  </head>
 <body>
@@ -11,7 +12,7 @@
 <div class="container">
 <h1 class='title'><a href='/' class='title'>applause</a></h1>
 <h1>view post</h1>
-<p>written by <b>NAME</b> and posted <span id='time'>TIME</span></p>
+<p>written by <b id='poster_name'>NAME</b> and posted <span id='time'>TIME</span></p>
 <div class="postbox">
 <button id='raw'>view markdown</button>
 <div class='clear'></div>
@@ -53,6 +54,8 @@ window.onload = async () => {
   let time = timeBox.innerHTML;
   time = new Date(time*1000).toString().replace(/\([^\)]+\)/,"").trim();
   timeBox.innerHTML = time.substr(0,time.lastIndexOf(' '));
+  let poster = document.getElementById('poster_name');
+  poster.innerHTML=punycode.toUnicode(poster.innerHTML);
   let textarea = document.getElementsByName('message')[0];
   let buttonApplause = document.getElementsByName('applause')[0];
   let inputName = document.getElementsByName('name')[0];
@@ -69,7 +72,7 @@ window.onload = async () => {
       inputName.parentNode.replaceChild(obj,inputName);
       names.forEach((name)=>{
         let n = document.createElement('option');
-        n.textContent = name.name;
+        n.textContent = punycode.toUnicode(name.name);
         n.value = name.name;
         obj.appendChild(n);
       }); 
@@ -93,7 +96,7 @@ window.onload = async () => {
     let obj = document.createElement('div');
     let _time = new Date(_app.timestamp*1000).toString().replace(/\([^\)]+\)/,"").trim();
     _time = _time.substr(0,_time.lastIndexOf(' '));
-    obj.innerHTML="<b>&#128079; "+_app.name+" at " +_time+ "</b><br><span class='spacer'></span>"+_app.signature;
+    obj.innerHTML="<b>&#128079; "+punycode.toUnicode(_app.name)+" at " +_time+ "</b><br><span class='spacer'></span>"+_app.signature;
     applauseBox.appendChild(obj);
   });
 

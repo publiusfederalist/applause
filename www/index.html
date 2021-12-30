@@ -3,6 +3,7 @@
   <title>applause - where hands come together</title>
   <link rel="stylesheet" type="text/css" href="/static/style.css">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="/static/punycode.min.js" integrity="sha256-r+GEq/KRBxyrsnSDn9/GLv2p7UjerQKo92YgHO7Ru4c=" crossorigin="anonymous"></script>
  </head>
 <body>
 <div class="background">
@@ -70,7 +71,7 @@ posts.forEach((post) => {
   let period="...";
   if(post.title.substr(0,1)=='#')
     period="";
-  obj.innerHTML=`<a href='/v/${post.id}'>${post.title}${period}</a><br><span><b>${post.poster}</b> about ${post.timestamp}</span>`;
+  obj.innerHTML=`<a href='/v/${post.id}'>${post.title}${period}</a><br><span><b>${punycode.toUnicode(post.poster)}</b> about ${post.timestamp}</span>`;
   postBox.appendChild(num);
   postBox.appendChild(obj);
   postBox.appendChild(document.createElement('br'));
