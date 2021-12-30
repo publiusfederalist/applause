@@ -2,6 +2,10 @@
 
 applause is a platform I built using centralized web technologies in combination with decentralized identity blockchain. The result is a website that requires no login or signup of any kind, and instead, let's users participate by authenticating their actions against the key associated with their name on the [Handshake](https://handshake.org/) blockchain.
 
+## Live
+
+You can see this live at [https://applause.chat/].
+
 ## Why
 
 I was browsing some of the Handshake related projects on Github and saw a recent [pull request](https://github.com/kyokan/bob-extension/pull/15) on Kyokan's Bob Wallet Extension. Highly interested, I downloaded and built the branch and started building this site.
