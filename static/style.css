@@ -212,6 +212,10 @@ div.postbox {
     overflow-y:auto;
     overflow-x:wrap;
   }
+    div.postbox div#postbox_content img, div.postbox div#postbox_preview img {
+      object-fit:contain;
+      max-width:100%;
+    }
   div.postbox textarea#postbox_markdown {
     background-color:#f3eee8;
     min-width:calc(100%);
