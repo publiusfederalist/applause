@@ -87,7 +87,7 @@ window.onload = async () => {
   }
   buttonApplause.onclick = async (e) => {
     e.preventDefault();
-    if(document.getElementsByName('name')[0].value.length==0 || document.getElementsByName('signature')[0].value.length==0) {
+    if((document.getElementsByName('name')[0].value.length==0 || document.getElementsByName('signature')[0].value.length==0) && typeof bob3 === "undefined") {
       alert("You need to include a valid Handshake name and signature generated with the key associated with the name.");
       return false;
     }
