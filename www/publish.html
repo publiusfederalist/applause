@@ -128,12 +128,13 @@ dragdrop.addEventListener('drop',(e) => {
     if (file.type.match(/image.*/)) {
       var reader = new FileReader();
       reader.onload = function(ev) {
-        textarea.innerHTML+=`![${file.name}](${ev.target.result})`;
+        let data = `![${file.name}](${ev.target.result})`;
+        textarea.value+=data;
       }
       reader.readAsDataURL(file);
     }
   }
-  dragdrop.style.display='none';
+  setTimeout(()=>{ dragdrop.style.display='none'; },500);
 });
 
 }
