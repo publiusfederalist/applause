@@ -11,6 +11,9 @@ const client = new NodeClient({
 });
 
 async function verify(name,message,signature) {
+  console.log(name, message, signature);
+  if(name.length==0 || name.includes(' '))
+    return false;
   if(Buffer.from(signature, 'base64').toString('base64') === signature)
     return await client.execute('verifymessagewithname', [punycode.toASCII(name), signature, message.replaceAll("\r","")]);
   return false;

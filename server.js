@@ -77,3 +77,6 @@ app.post('/applause', async (req, res, next) => {
 });
 app.get('*', (req, res, next) => { res.send(error("Page not found")) });
 
+process.on('uncaughtException', (err, origin) => {
+  console.error(`${parseInt(Number(new Date()) / 1000)} # Serious problem (${origin}) ${err.stack}`);
+});
