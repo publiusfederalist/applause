@@ -23,6 +23,7 @@
  <button name='post'>post</button>
 </form>
 <div id="postbox_preview"></div>
+<div id="dragdrop">Drop Image File Here</div>
 </div>
 
 <div class="footer">
@@ -39,6 +40,7 @@ let buttonPreview = document.getElementsByName('preview')[0];
 let buttonPost = document.getElementsByName('post')[0];
 let inputName = document.getElementsByName('name')[0];
 let signatureInput = document.getElementsByName('signature')[0];
+let dragdrop = document.getElementById('dragdrop');
 let wallet;
 
 // bob3
@@ -93,6 +95,46 @@ req.onreadystatechange = () => {
 }
 req.open('GET','/csrf');
 req.send();
+
+// drag drop
+let isPrompt=false;
+textarea.addEventListener('dragover', (e)=> {
+  e.stopPropagation();
+  e.preventDefault();
+  e.dataTransfer.dropEffect = 'copy';
+  dragdrop.style.display='block';
+});
+dragdrop.addEventListener('dragover', (e)=> {
+  isPrompt=true;
+  e.stopPropagation();
+  e.preventDefault();
+  e.dataTransfer.dropEffect = 'copy';
+  dragdrop.style.display='block';
+});
+dragdrop.addEventListener('dragleave', (e)=> {
+  isPrompt=false;
+  e.stopPropagation();
+  e.preventDefault();
+  e.dataTransfer.dropEffect = 'copy';
+  dragdrop.style.display='none';
+});
+dragdrop.addEventListener('drop',(e) => {
+  e.stopPropagation();
+  e.preventDefault();
+
+  var files = e.dataTransfer.files;
+  for(let x=0;x<files.length;x++) {
+    let file = files[x];
+    if (file.type.match(/image.*/)) {
+      var reader = new FileReader();
+      reader.onload = function(ev) {
+        textarea.innerHTML+=`![${file.name}](${ev.target.result})`;
+      }
+      reader.readAsDataURL(file);
+    }
+  }
+  dragdrop.style.display='none';
+});
 
 }
 </script>

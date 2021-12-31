@@ -171,7 +171,7 @@ div.postbox {
         background-color:#ffffff;
         cursor:pointer;
       }
-  div.postbox div#postbox_preview {
+  div.postbox div#postbox_preview, div.postbox div#dragdrop {
     position:absolute;
     left:0;
     top:0;
@@ -189,6 +189,13 @@ div.postbox {
     padding-bottom:1vh;
     overflow-y:auto;
     overflow-x:wrap;
+  }
+  div.postbox div#dragdrop {
+    opacity:0.6;
+    font-size:72px;
+    background:none;    
+    border:0;
+    text-align:center;
   }
   div.postbox div#postbox_content {
     background-color:#e2ddd7;
