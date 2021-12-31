@@ -7,7 +7,8 @@ class DB {
       host: '127.0.0.1',
       user: 'applause',
       password: fs.readFileSync(__dirname+"/secrets/db.secret").toString().trim(),
-      database: 'applause'
+      database: 'applause',
+      charset: "utf8mb4"
     });
     this.connection.connect();
     this.query = this.connection.query.bind(this.connection);

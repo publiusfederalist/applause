@@ -45,6 +45,9 @@ All rights reserved.<br>
 </div>
 <script>
 window.onload = async () => {
+  let _t = document.title.split(" ");
+  _t[3]=punycode.toUnicode(_t[3]);
+  document.title = _t.join(' ');
   let content = document.getElementById('postbox_content');
   let markdown = document.getElementById('postbox_markdown');
   markdown.value = content.innerHTML;

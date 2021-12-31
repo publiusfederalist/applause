@@ -52,7 +52,7 @@ npm install mysql csurf express express-session hs-client hsd moment
 CREATE TABLE POSTS (
   id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
   user VARCHAR(253) NOT NULL,
-  message TEXT NOT NULL,
+  message LONGTEXT NOT NULL,
   signature VARCHAR(89) NOT NULL UNIQUE,
   timestamp INT NOT NULL
 );
