@@ -2,6 +2,7 @@ const fs = require('fs');
 const {NodeClient} = require('hs-client');
 const {Network} = require('hsd');
 const network = Network.get('main');
+const punycode = require('punycode');
 
 const client = new NodeClient({
   network: network.type,
@@ -11,7 +12,7 @@ const client = new NodeClient({
 
 async function verify(name,message,signature) {
   if(Buffer.from(signature, 'base64').toString('base64') === signature)
-    return await client.execute('verifymessagewithname', [name, signature, message.replaceAll("\r","")]);
+    return await client.execute('verifymessagewithname', [punycode.toASCII(name), signature, message.replaceAll("\r","")]);
   return false;
 }
 
