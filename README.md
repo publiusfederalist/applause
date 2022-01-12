@@ -1,5 +1,7 @@
 # Blending Web 2/3, is this Web .666? ( •̀ᴗ•́ )و ̑̑
 
+# [Why I Quit Handshake](https://github.com/publiusfederalist/why-i-quit-handshake)
+
 applause is a platform I built using centralized web technologies in combination with decentralized identity blockchain. The result is a website that requires no login or signup of any kind, and instead, lets users participate by authenticating their actions against the key associated with their name on the [Handshake](https://handshake.org/) blockchain.
 
 ## Live
